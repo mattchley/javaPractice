@@ -10,10 +10,13 @@ public class Main {
         static Scanner stringInput = new Scanner(System.in);
         static Scanner doubleInput = new Scanner(System.in);
         static String startingCurrency;
-        static Double startingCurrencyAmount;
+        static double startingCurrencyAmount;
         static String confirmStartingCurrency;
         static String endingCurrency;
         static String confirmEndingCurrency;
+        static double convertedAmount;
+        static boolean startingAmountConfirmation = false;
+        static boolean endingCurrencyConfirmation = false;
         static String[] currencyArray = { "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP",
                         "HKD",
                         "HRK", "HUF", "IDR", "ILS", "INR", "ISK", "JPY", "KRW", "MXN", "MYR", "NZD", "NOK",
@@ -22,58 +25,92 @@ public class Main {
         static String currencies = Arrays.toString(currencyArray);
         static List<String> currencylist = new ArrayList<String>(Arrays.asList(currencyArray));
 
-        static String stepOne() {
+        static void askQuestion(String stepInProcess) {
+                switch (stepInProcess) {
+                        case "intro":
 
-                System.out.println(
-                                "Greetings! This is a basic currency converter. It uses the freecurrencyapi. Currently it can convert the 33 currencies: \nChoose the starting currency: "
-                                                + currencies);
+                                System.out.println(
+                                                "Greetings! This is a basic currency converter. It uses the freecurrencyapi. Currently it can convert the 33 currencies: \nChoose the starting currency: "
+                                                                + currencies);
 
-                startingCurrency = stringInput.nextLine();
-                System.out.println(
-                                "Choose the amount exp: 1.00");
-                startingCurrencyAmount = doubleInput.nextDouble();
-                System.out.println("You entered " + startingCurrencyAmount + " " + startingCurrency
-                                + ", is this correct? Y/N");
-                confirmStartingCurrency = stringInput.nextLine();
-                return confirmStartingCurrency;
+                                break;
+                        case "amount":
+                                System.out.println(
+                                                "Choose the amount exp: 1.00");
+
+                                break;
+                        case "confirm first choices":
+                                System.out.println("You entered " + startingCurrencyAmount + " " + startingCurrency
+                                                + ", is this correct? Y/N");
+
+                                break;
+                        case "choose ending currency":
+                                System.out.println(
+                                                "Choose the ending currency: "
+                                                                + Arrays.toString(currencylist.toArray()));
+                                break;
+                        case "confirm second choices":
+                                System.out.println("You entered " + endingCurrency + ", is this correct? Y/N");
+                                break;
+                        case "end":
+                                System.out.println(
+                                                startingCurrencyAmount + " " + startingCurrency + "converted to " +
+                                                                endingCurrency + " is "
+                                                                + convertedAmount);
+                                break;
+
+                }
         }
 
-        static String stepTwo() {
+        static boolean isStepOneDone() {
+                askQuestion("intro");
+                startingCurrency = stringInput.nextLine();
+                askQuestion("amount");
+                startingCurrencyAmount = doubleInput.nextDouble();
+                askQuestion("confirm first choices");
+                confirmStartingCurrency = stringInput.nextLine();
+
+                return !confirmStartingCurrency.equals("y") && !confirmStartingCurrency.equals("Y") ? false
+                                : true;
+
+        }
+
+        static boolean isStepTwoDone() {
 
                 currencylist.remove(startingCurrency);
-                System.out.println(
-                                "Choose the ending currency: " + Arrays.toString(currencylist.toArray()));
+                askQuestion("choose ending currency");
                 endingCurrency = stringInput.nextLine();
-                System.out.println("You entered " + endingCurrency + ", is this correct? Y/N");
+                askQuestion("confirm second choices");
                 confirmEndingCurrency = stringInput.nextLine();
-                return confirmEndingCurrency;
+
+                return !confirmEndingCurrency.equals("y") && !confirmEndingCurrency.equals("Y") ? false : true;
+
         }
 
         static void finalStep() {
-                double convertedAmount = startingCurrencyAmount * 10.61;
-                System.out.println(
-                                startingCurrencyAmount + " " + startingCurrency + "converted to " +
-                                                endingCurrency + " is "
-                                                + convertedAmount);
+                convertedAmount = startingCurrencyAmount * 10.61;
+                askQuestion("end");
                 stringInput.close();
                 doubleInput.close();
         }
 
+        static void intermediateStep(boolean stepToExecute) {
+
+                do {
+                        if (stepToExecute)
+                                endingCurrencyConfirmation = true;
+
+                } while (!endingCurrencyConfirmation);
+
+        }
+
+        static void runCurrencyCoverter() {
+                intermediateStep(isStepOneDone());
+                intermediateStep(isStepTwoDone());
+                finalStep();
+        }
+
         public static void main(String[] args) {
-                String startingAmountConfirmation;
-                String endingCurrencyConfirmation;
-                startingAmountConfirmation = stepOne();
-                if (startingAmountConfirmation.equals("y") || startingAmountConfirmation.equals("Y")) {
-                        endingCurrencyConfirmation = stepTwo();
-                        if (endingCurrencyConfirmation.equals("y") || endingCurrencyConfirmation.equals("Y")) {
-                                finalStep();
-                        } else {
-                                // code to deal with negative path
-                        }
-                } else {
-                        // code to deal with negative path
-
-                }
-
+                runCurrencyCoverter();
         }
 }
