@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -11,12 +14,17 @@ public class Main {
         String confirmStartingCurrency;
         String endingCurrency;
         String confirmEndingCurrency;
+        String[] listofCurrencies = { "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD",
+                "HRK", "HUF", "IDR", "ILS", "INR", "ISK", "JPY", "KRW", "MXN", "MYR", "NZD", "NOK", "PHP", "PLN", "RON",
+                "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR" };
+        String currencies = Arrays.toString(listofCurrencies);
 
         System.out.println(
-                "Greetings! This is a basic currency converter project. It uses the freecurrencyapi. Currently it can convert the following currencies to any of these 33 currencies: AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NZD,  NOK, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR");
+                "Greetings! This is a basic currency converter project. It uses the freecurrencyapi. Currently it can convert the following currencies to any of these 33 currencies: "
+                        + currencies);
 
         System.out.println(
-                "Choose the starting currency: AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NZD,  NOK, PHP, PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR");
+                "Choose the starting currency: " + currencies);
         startingCurrency = input.nextLine();
         System.out.println(
                 "Choose the amount exp: 1.00");
@@ -25,8 +33,10 @@ public class Main {
                 + ", is this correct?");
         confirmStartingCurrency = input.nextLine();
         if (confirmStartingCurrency.equals("yes")) {
+            List<String> currencylist = new ArrayList<String>(Arrays.asList(listofCurrencies));
+            currencylist.remove(startingCurrency);
             System.out.println(
-                    "Choose the ending currency: AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EUR,GBP, HKD, HRK, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NZD, NOK, PHP,PLN, RON, RUB, SEK, SGD, THB, TRY, USD, ZAR");
+                    "Choose the ending currency: " + Arrays.toString(currencylist.toArray()));
             endingCurrency = input.nextLine();
             System.out.println("You entered " + endingCurrency + ", is this correct?");
             confirmEndingCurrency = input.nextLine();
