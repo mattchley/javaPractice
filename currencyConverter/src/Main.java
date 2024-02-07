@@ -13,7 +13,6 @@ public class Main {
         static String confirmEndingCurrency;
         static String continueWithApp;
         static double convertedAmount;
-        static boolean startingAmountConfirmation = false;
         static boolean endingCurrencyConfirmation = false;
         static String[] currencyArray = { "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP",
                         "HKD",
@@ -68,21 +67,24 @@ public class Main {
         static boolean isValidAmount(String startingCurrencyAmount) {
                 if (startingCurrencyAmount.length() < 1)
                         return false;
-
-                if (startingCurrencyAmount.matches("[0-9.]+")) {
+                if (startingCurrencyAmount.matches("[0-9]+") && !startingCurrencyAmount.matches("[.]+")) {
                         return true;
-                } else if (!startingCurrencyAmount.matches("[0-9]+")) {
-                        return false;
-                } else {
+                } else if (startingCurrencyAmount.matches("[0-9.]+")) {
                         return true;
                 }
+
+                return false;
 
         }
 
         static String addDecimalValue(String startingCurrencyAmount) {
-                return !startingCurrencyAmount.matches("[0-9.]+") ? startingCurrencyAmount + ".00"
-                                : startingCurrencyAmount;
 
+                if (startingCurrencyAmount.matches("[0-9]+") && !startingCurrencyAmount.matches("[.]+")) {
+                        return startingCurrencyAmount + ".00";
+                } else if (startingCurrencyAmount.matches("[0-9.]+"))
+                        return startingCurrencyAmount;
+
+                return startingCurrencyAmount;
         }
 
         static boolean isGoingToNextStep(String confirmStatementString) {
