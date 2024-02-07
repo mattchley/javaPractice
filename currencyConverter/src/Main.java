@@ -4,12 +4,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-
-        // upon start up, text explaining the app to the user
-        // list the types to convert
+        // TODO add checks on scanner in case they don't use a currency in the Array or
+        // No numbers in amount
         static Scanner stringInput = new Scanner(System.in);
         static Scanner doubleInput = new Scanner(System.in);
-        static String startingCurrency;
+        static String startingCurrency = " ";
         static double startingCurrencyAmount;
         static String confirmStartingCurrency;
         static String endingCurrency;
@@ -62,9 +61,16 @@ public class Main {
                 }
         }
 
+        static boolean isValidInput(String startingCurrency) {
+                return Arrays.asList(currencyArray).contains(startingCurrency);
+        }
+
         static boolean isStepOneDone() {
-                askQuestion("intro");
-                startingCurrency = stringInput.nextLine();
+                do {
+                        askQuestion("intro");
+                        startingCurrency = stringInput.nextLine();
+                } while (!isValidInput(startingCurrency));
+
                 askQuestion("amount");
                 startingCurrencyAmount = doubleInput.nextDouble();
                 askQuestion("confirm first choices");
@@ -78,8 +84,11 @@ public class Main {
         static boolean isStepTwoDone() {
 
                 currencylist.remove(startingCurrency);
-                askQuestion("choose ending currency");
-                endingCurrency = stringInput.nextLine();
+                do {
+                        askQuestion("choose ending currency");
+                        endingCurrency = stringInput.nextLine();
+                } while (!isValidInput(endingCurrency));
+
                 askQuestion("confirm second choices");
                 confirmEndingCurrency = stringInput.nextLine();
 
