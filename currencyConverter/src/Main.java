@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-        // TODO add checks on scanner in case they don't use a currency in the Array or
-        // No numbers in amount
+        // TODO add checks on scanner in case they don't use numbers in amount
         static Scanner stringInput = new Scanner(System.in);
         static Scanner doubleInput = new Scanner(System.in);
         static String startingCurrency = " ";
@@ -13,6 +12,7 @@ public class Main {
         static String confirmStartingCurrency;
         static String endingCurrency;
         static String confirmEndingCurrency;
+        static String continueWithApp;
         static double convertedAmount;
         static boolean startingAmountConfirmation = false;
         static boolean endingCurrencyConfirmation = false;
@@ -53,9 +53,10 @@ public class Main {
                                 break;
                         case "end":
                                 System.out.println(
-                                                startingCurrencyAmount + " " + startingCurrency + "converted to " +
+                                                startingCurrencyAmount + " " + startingCurrency + " converted to " +
                                                                 endingCurrency + " is "
-                                                                + convertedAmount);
+                                                                + convertedAmount + "\n"
+                                                                + "Would you like to try again? Y/N");
                                 break;
 
                 }
@@ -63,6 +64,11 @@ public class Main {
 
         static boolean isValidInput(String startingCurrency) {
                 return Arrays.asList(currencyArray).contains(startingCurrency);
+        }
+
+        static boolean isGoingToNextStep(String confirmStatementString) {
+                return !confirmStatementString.equals("y") && !confirmStatementString.equals("Y") ? false
+                                : true;
         }
 
         static boolean isStepOneDone() {
@@ -75,9 +81,7 @@ public class Main {
                 startingCurrencyAmount = doubleInput.nextDouble();
                 askQuestion("confirm first choices");
                 confirmStartingCurrency = stringInput.nextLine();
-
-                return !confirmStartingCurrency.equals("y") && !confirmStartingCurrency.equals("Y") ? false
-                                : true;
+                return isGoingToNextStep(confirmStartingCurrency);
 
         }
 
@@ -91,19 +95,24 @@ public class Main {
 
                 askQuestion("confirm second choices");
                 confirmEndingCurrency = stringInput.nextLine();
-
-                return !confirmEndingCurrency.equals("y") && !confirmEndingCurrency.equals("Y") ? false : true;
+                return isGoingToNextStep(confirmEndingCurrency);
 
         }
 
-        static void finalStep() {
+        static boolean isfinalStepDone() {
                 convertedAmount = startingCurrencyAmount * 10.61;
                 askQuestion("end");
+                continueWithApp = stringInput.nextLine();
+                return !continueWithApp.equals("n") && !continueWithApp.equals("N") ? true
+                                : false;
+        }
+
+        static void terminateApplication() {
                 stringInput.close();
                 doubleInput.close();
         }
 
-        static void intermediateStep(boolean stepToExecute) {
+        static void perpetuateFuncs(boolean stepToExecute) {
 
                 do {
                         if (stepToExecute)
@@ -113,13 +122,19 @@ public class Main {
 
         }
 
-        static void runCurrencyCoverter() {
-                intermediateStep(isStepOneDone());
-                intermediateStep(isStepTwoDone());
-                finalStep();
+        static boolean runCurrencyCoverter() {
+                perpetuateFuncs(isStepOneDone());
+                perpetuateFuncs(isStepTwoDone());
+                return isfinalStepDone();
         }
 
         public static void main(String[] args) {
-                runCurrencyCoverter();
+                boolean continueApp = true;
+                do {
+                        if (!runCurrencyCoverter()) {
+                                terminateApplication();
+                                continueApp = false;
+                        }
+                } while (continueApp);
         }
 }
