@@ -6,9 +6,8 @@ import java.util.Scanner;
 public class Main {
         // TODO add checks on scanner in case they don't use numbers in amount
         static Scanner stringInput = new Scanner(System.in);
-        static Scanner doubleInput = new Scanner(System.in);
         static String startingCurrency = " ";
-        static double startingCurrencyAmount;
+        static String startingCurrencyAmount;
         static String confirmStartingCurrency;
         static String endingCurrency;
         static String confirmEndingCurrency;
@@ -66,6 +65,26 @@ public class Main {
                 return Arrays.asList(currencyArray).contains(startingCurrency);
         }
 
+        static boolean isValidAmount(String startingCurrencyAmount) {
+                if (startingCurrencyAmount.length() < 1)
+                        return false;
+
+                if (startingCurrencyAmount.matches("[0-9.]+")) {
+                        return true;
+                } else if (!startingCurrencyAmount.matches("[0-9]+")) {
+                        return false;
+                } else {
+                        return true;
+                }
+
+        }
+
+        static String addDecimalValue(String startingCurrencyAmount) {
+                return !startingCurrencyAmount.matches("[0-9.]+") ? startingCurrencyAmount + ".00"
+                                : startingCurrencyAmount;
+
+        }
+
         static boolean isGoingToNextStep(String confirmStatementString) {
                 return !confirmStatementString.equals("y") && !confirmStatementString.equals("Y") ? false
                                 : true;
@@ -77,8 +96,11 @@ public class Main {
                         startingCurrency = stringInput.nextLine();
                 } while (!isValidInput(startingCurrency));
 
-                askQuestion("amount");
-                startingCurrencyAmount = doubleInput.nextDouble();
+                do {
+                        askQuestion("amount");
+                        startingCurrencyAmount = stringInput.nextLine();
+                } while (!isValidAmount(startingCurrencyAmount));
+                startingCurrencyAmount = addDecimalValue(startingCurrencyAmount);
                 askQuestion("confirm first choices");
                 confirmStartingCurrency = stringInput.nextLine();
                 return isGoingToNextStep(confirmStartingCurrency);
@@ -100,7 +122,7 @@ public class Main {
         }
 
         static boolean isfinalStepDone() {
-                convertedAmount = startingCurrencyAmount * 10.61;
+                convertedAmount = Double.parseDouble(startingCurrencyAmount) * 10.61;
                 askQuestion("end");
                 continueWithApp = stringInput.nextLine();
                 return !continueWithApp.equals("n") && !continueWithApp.equals("N") ? true
@@ -109,7 +131,6 @@ public class Main {
 
         static void terminateApplication() {
                 stringInput.close();
-                doubleInput.close();
         }
 
         static void perpetuateFuncs(boolean stepToExecute) {
