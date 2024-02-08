@@ -105,7 +105,12 @@ public class Main {
                 startingCurrencyAmount = addDecimalValue(startingCurrencyAmount);
                 askQuestion("confirm first choices");
                 confirmStartingCurrency = stringInput.nextLine();
-                return isGoingToNextStep(confirmStartingCurrency);
+                if (isGoingToNextStep(confirmStartingCurrency)) {
+                        return true;
+                } else {
+                        isStepOneDone();
+                }
+                return false;
 
         }
 
@@ -119,7 +124,12 @@ public class Main {
 
                 askQuestion("confirm second choices");
                 confirmEndingCurrency = stringInput.nextLine();
-                return isGoingToNextStep(confirmEndingCurrency);
+                if (isGoingToNextStep(confirmEndingCurrency)) {
+                        return true;
+                } else {
+                        isStepTwoDone();
+                }
+                return false;
 
         }
 
