@@ -7,5 +7,5 @@ Basic outline of project
    or
    -user select ending amount
    -user selects the 2 currencies to use
-2. Code that gathers the conversion rates from an api
+2. Code that gathers the conversion rates from an api(https://app.freecurrencyapi.com/dashboard)
 3. Equation to convert the amounts with the rates
