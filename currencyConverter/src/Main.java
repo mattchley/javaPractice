@@ -1,15 +1,16 @@
 public class Main {
 
-        public static void main(String[] args)  {
-                boolean continueApp = true;
-                Game application = new Game();
-                do {
-                        if (!application.runCurrencyCoverter()) {
-                                application.terminateApplication();
-                                continueApp = false;
-                        }
-                } while (continueApp);
+  // TODO decimals input that is more than .00
+  // TODO decimal round up for conversion rate
+  // TODO kill switch when Q/q is placed in input
+  // TODO auto uppercase with input?
 
-        }
-
+  public static void main(String[] args) {
+    Game application = new Game();
+    try {
+      application.startStep();
+    } catch (Exception e) {
+      System.err.println(e);
+    }
+  }
 }

@@ -4,7 +4,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 
-class CallApi {
+public class CallApi {
         String apiKey = "?apikey=fca_live_M3gDuHzOzkNIu8cuzkPwtifj2DmYJOXCazyOxhRc";
 
         String convertJson(String response, String endingCurency) {
