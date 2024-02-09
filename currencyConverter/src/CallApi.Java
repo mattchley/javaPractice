@@ -5,28 +5,24 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 
 class CallApi {
-        void res() throws IOException, InterruptedException {
-                HttpClient client = HttpClient.newHttpClient();
-                HttpRequest request = HttpRequest.newBuilder()
-                                .uri(URI.create("http://webcode.me"))
-                                .build();
+        String apiKey = "?apikey=fca_live_M3gDuHzOzkNIu8cuzkPwtifj2DmYJOXCazyOxhRc";
 
-                HttpResponse<String> response = client.send(request,
-                                HttpResponse.BodyHandlers.ofString());
-
-                System.out.println(response.body());
+        String convertJson(String response, String endingCurency) {
+                int findCurrencyIndex = response.indexOf(endingCurency);
+                String findConversionString = response.substring(findCurrencyIndex + 5, response.length() - 3);
+                return findConversionString;
         }
 
-        void send(String Param) throws IOException, InterruptedException {
+        String res(String startingCurrency, String endingCurency) throws IOException, InterruptedException {
                 HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder()
-                                .uri(URI.create("https://httpbin.org/post"))
-                                .POST(HttpRequest.BodyPublishers.ofString(Param))
+                                .uri(URI.create("https://api.freecurrencyapi.com/v1/latest" + apiKey + "&currencies="
+                                                + endingCurency + "&base_currency=" + startingCurrency))
                                 .build();
 
                 HttpResponse<String> response = client.send(request,
                                 HttpResponse.BodyHandlers.ofString());
 
-                System.out.println(response.body());
+                return convertJson(response.body(), endingCurency);
         }
 }

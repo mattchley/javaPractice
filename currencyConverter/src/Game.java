@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.io.IOException;
 import java.util.Scanner;
 
 class Game {
-        // TODO add checks on scanner in case they don't use numbers in amount
         Scanner stringInput = new Scanner(System.in);
         String startingCurrency = " ";
         String startingCurrencyAmount;
@@ -133,12 +133,21 @@ class Game {
 
         }
 
-        boolean isfinalStepDone() {
-                convertedAmount = Double.parseDouble(startingCurrencyAmount) * 10.61;
-                askQuestion("end");
-                continueWithApp = stringInput.nextLine();
-                return !continueWithApp.equals("n") && !continueWithApp.equals("N") ? true
-                                : false;
+        boolean isfinalStepDone() throws IOException, InterruptedException{
+                CallApi test = new CallApi();
+                String responseConvertRate;
+                try {
+                        responseConvertRate =test.res(startingCurrency, endingCurrency);
+                        convertedAmount = Double.parseDouble(startingCurrencyAmount) * Double.parseDouble(responseConvertRate);
+                        askQuestion("end");
+                        continueWithApp = stringInput.nextLine();
+                        return !continueWithApp.equals("n") && !continueWithApp.equals("N") ? true
+                                        : false;
+                } catch (Exception e) {
+                        System.err.println(e);
+                        return false;
+                }
+           
         }
 
         void terminateApplication() {
@@ -158,6 +167,12 @@ class Game {
         boolean runCurrencyCoverter() {
                 perpetuateFuncs(isStepOneDone());
                 perpetuateFuncs(isStepTwoDone());
-                return isfinalStepDone();
+                try{
+                        return isfinalStepDone();
+                 } catch (Exception e) {
+                        System.err.println(e);
+                        return false;
+                }
+
         }
 }
